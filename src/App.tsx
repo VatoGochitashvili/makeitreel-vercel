@@ -1,34 +1,41 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [transcript, setTranscript] = useState('')
+  const [result, setResult] = useState('')
+
+  const handleSummarize = async () => {
+    try {
+      const response = await fetch('https://your-backend-url/api/summarize', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ transcript }),
+      })
+
+      const data = await response.json()
+      setResult(data.shorts || 'No response received.')
+    } catch (error) {
+      setResult('Error connecting to backend.')
+    }
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div style={{ padding: 20, fontFamily: 'Arial' }}>
+      <h1>MakeItReel – AI Shorts Generator</h1>
+      <textarea
+        value={transcript}
+        onChange={(e) => setTranscript(e.target.value)}
+        placeholder="Paste your YouTube transcript here..."
+        rows={10}
+        style={{ width: '100%', padding: 10 }}
+      />
+      <br />
+      <button onClick={handleSummarize}>Generate Shorts</button>
+      <div style={{ marginTop: 20, whiteSpace: 'pre-wrap' }}>{result}</div>
+    </div>
   )
 }
 
