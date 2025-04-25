@@ -7,7 +7,7 @@ function App() {
 
   const handleSummarize = async () => {
     try {
-      const response = await fetch('https://your-backend-url/api/summarize', {
+      const response = await fetch('https://makeitreel-backend.onrender.com/api/summarize', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
